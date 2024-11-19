@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public class ActionRandomPedestrianDialog {
 
-	public enum TARGET_OPTION { EMPTY, RANDOM, USE_LIST }
+	public enum TARGET_OPTION { EMPTY, RANDOM, USE_LIST, NEAREST }
 
 	// Member Variables
 	private JTextField firstPedIdField;
@@ -30,6 +30,7 @@ public class ActionRandomPedestrianDialog {
 	private JRadioButton rbTargetEmpty;
 	private JRadioButton rbTargetRandom;
 	private JRadioButton rbTargetUseList;
+	private JRadioButton rbTargetNearest;
 
 	private JPanel panelWindow;
 	private JPanel panelRadioButtons;
@@ -174,12 +175,15 @@ public class ActionRandomPedestrianDialog {
 		rbTargetEmpty = new JRadioButton(Messages.getString("TopographyCreator.PlaceRandomPedestrians.targetEmptyOption.label"), true);
 		rbTargetRandom = new JRadioButton(Messages.getString("TopographyCreator.PlaceRandomPedestrians.targetRandomOption.label"), false);
 		rbTargetUseList = new JRadioButton(Messages.getString("TopographyCreator.PlaceRandomPedestrians.targetListOption.label"), false);
+		rbTargetNearest = new JRadioButton(Messages.getString("TopographyCreator.PlaceRandomPedestrians.targetNearestOption.label"), false);
+
 		targetsField.setEditable(false);
 
 		ButtonGroup buttonGroupTarget = new ButtonGroup();
 		buttonGroupTarget.add(rbTargetEmpty);
 		buttonGroupTarget.add(rbTargetRandom);
 		buttonGroupTarget.add(rbTargetUseList);
+		buttonGroupTarget.add(rbTargetNearest);
 
 		rbTargetUseList.addItemListener(new ItemListener() {
 			@Override
@@ -197,6 +201,8 @@ public class ActionRandomPedestrianDialog {
 		panelRadioButtons.add(rbTargetEmpty);
 		panelRadioButtons.add(rbTargetRandom);
 		panelRadioButtons.add(rbTargetUseList);
+		panelRadioButtons.add(rbTargetNearest);
+
 	}
 
 	private void placeGuiElements() {
@@ -273,6 +279,8 @@ public class ActionRandomPedestrianDialog {
 			selectedOption = TARGET_OPTION.RANDOM;
 		} else if (rbTargetUseList.isSelected()) {
 			selectedOption = TARGET_OPTION.USE_LIST;
+		} else if (rbTargetNearest.isSelected()) {
+			selectedOption = TARGET_OPTION.NEAREST;
 		} else {
 			throw new IllegalArgumentException("No valid target option selected!");
 		}
