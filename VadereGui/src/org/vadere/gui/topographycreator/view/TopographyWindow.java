@@ -453,6 +453,12 @@ public class TopographyWindow extends JPanel {
 				new EraserMode(panelModel, undoSupport),
 				basicAction);
 
+		Action information = new ActionTopographyInformation(
+				"TopographyInformation",
+				ResourceStrings.ICONS_INFORMATION_ICON_PNG,
+				panelModel
+		);
+
 		// overlay toolbar
 		JPanel pane = new JPanel(){
 			@Override
@@ -508,7 +514,9 @@ public class TopographyWindow extends JPanel {
 				polyImg,
 				generateMesh
 		);
-		toolbar.addSections(sectionE,sectionF,sectionA,sectionB,sectionC,sectionD);
+
+		var sectionG = new ScenarioToolBarSection(information);
+		toolbar.addSections(sectionE,sectionF,sectionA,sectionB,sectionC,sectionD, sectionG);
 
 		mainPanel.setBorder(BorderFactory.createLineBorder(Color.red));
 

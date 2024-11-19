@@ -22,6 +22,7 @@ public final class ResourceStrings {
     public static final String ICONS_SAVE_ICON_PNG = "/icons/save_icon.png";
     public static final String ICONS_UNDO_ICON_PNG = "/icons/undo_icon.png";
     public static final String ICONS_REDO_ICON_PNG = "/icons/redo_icon.png";
+    public static final String ICONS_INFORMATION_ICON_PNG = "/icons/info_icon.png";
     public static final String ICONS_MERGE_PNG = "/icons/merge.png";
     public static final String TOPOGRAPHY_CREATOR_BTN_ZOOM_IN_TOOLTIP = "TopographyCreator.btnZoomIn.tooltip";
     public static final String TOPOGRAPHY_CREATOR_BTN_CUT_TOPOGRAPHY_TOOLTIP = "TopographyCreator.btnCutTopography.tooltip";
