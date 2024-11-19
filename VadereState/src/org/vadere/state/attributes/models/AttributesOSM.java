@@ -216,6 +216,8 @@ public class AttributesOSM extends Attributes {
 		return dynamicStepLength;
 	}
 
+	public void setOptimizationType(OptimizationType optimizationType) { this.optimizationType = optimizationType; }
+
 	public UpdateType getUpdateType() {
 		return updateType;
 	}

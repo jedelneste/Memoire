@@ -263,6 +263,16 @@ public class VadereProject {
 		return getScenarios().toArray(new Scenario[]{})[index];
 	}
 
+	public Scenario getScenarioByName(String scenarioName) {
+		try {
+			return scenarios.get(scenarioName);
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	public void removeScenario(final Scenario scenario) {
 		scenarios.remove(scenario.getName());
 	}

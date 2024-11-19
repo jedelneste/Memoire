@@ -57,6 +57,8 @@ public class SimulationResult {
 		return state;
 	}
 
+	public Duration getRunTime(){ return runTime; }
+
 	public void setState(String state) {
 		this.state = state;
 	}

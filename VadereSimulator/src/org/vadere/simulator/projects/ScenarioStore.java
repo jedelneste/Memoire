@@ -7,6 +7,7 @@ import org.vadere.simulator.projects.io.JsonConverter;
 import org.vadere.state.attributes.Attributes;
 import org.vadere.state.attributes.AttributesPsychology;
 import org.vadere.state.attributes.AttributesSimulation;
+import org.vadere.state.attributes.models.AttributesOSM;
 import org.vadere.state.attributes.scenario.AttributesCar;
 import org.vadere.state.psychology.perception.json.StimulusInfoStore;
 import org.vadere.state.scenario.Topography;
@@ -141,6 +142,16 @@ public class ScenarioStore {
 
 	public List<Attributes> getAttributesList() {
 		return attributesList;
+	}
+
+	public AttributesOSM getAttributesOSM() {
+		for (Attributes attributes : attributesList) {
+			if (attributes instanceof AttributesOSM) {
+				return (AttributesOSM) attributes;
+			}
+		}
+		logger.info("There is no AttributeOSM in the attributeList");
+		return null;
 	}
 
 	public String getDescription() {

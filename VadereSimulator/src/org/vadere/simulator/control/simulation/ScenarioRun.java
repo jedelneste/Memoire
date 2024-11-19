@@ -400,6 +400,8 @@ public class ScenarioRun implements Runnable {
 		return scenario;
 	}
 
+	public Simulation getSimulation() { return simulation; }
+
 	public StimulusController getStimulusController() {
 		return simulation.getStimulusController();
 	}
