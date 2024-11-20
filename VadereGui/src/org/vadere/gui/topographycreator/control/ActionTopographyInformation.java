@@ -38,16 +38,17 @@ public class ActionTopographyInformation extends TopographyAction {
         {
             topography = drawPanelModel.getTopography();
             JPanel panel = new JPanel(new GridLayout(0, 1));
-            panel.add(new JLabel("- Nombre de sorties de secours : " + getNumberOfTargets() +"."));
+            panel.add(new JLabel("- Nombre total de piétons : " + getNumberOfPeds()));
+            panel.add(new JLabel("- Nombre de sorties de secours : " + getNumberOfTargets()));
             DecimalFormat numberFormat = new DecimalFormat("#.00");
-            panel.add(new JLabel("- Longueur totale des sorties de secours : " + numberFormat.format(getTotalLengthOfTargets()) + " mètres."));
+            panel.add(new JLabel("- Longueur totale des sorties de secours : " + numberFormat.format(getTotalLengthOfTargets()) + " mètres"));
 
             if (!getTargets().isEmpty()) {
                 DistanceResult distance = getFarthestPoint();
                 Coordinate farthest = distance.getCoordinate();
                 double dist = distance.getDistance();
                 panel.add(new JLabel("- Point le plus éloigné de toute sortie : (" + numberFormat.format(farthest.x) + ", " + numberFormat.format(farthest.y) + ")"));
-                panel.add(new JLabel("- Distance entre ce point et la source la plus proche : " + numberFormat.format(dist) + " mètres."));
+                panel.add(new JLabel("- Distance entre ce point et la sortie la plus proche : " + numberFormat.format(dist) + " mètres"));
             }
 
             // Afficher un popup avec le panneau
@@ -67,6 +68,8 @@ public class ActionTopographyInformation extends TopographyAction {
     private List<Obstacle> getObstacles(){
         return topography.getObstacles();
     }
+
+    private int getNumberOfPeds(){ return topography.getPedestrianDynamicElements().getInitialElements().size(); }
 
     /**
      * Computes the total length of the targets by taking the longest side of each target

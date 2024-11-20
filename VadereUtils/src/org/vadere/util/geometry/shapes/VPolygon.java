@@ -15,6 +15,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import java.lang.Double;
+
 import org.vadere.util.geometry.GeometryUtils;
 import org.vadere.util.geometry.GrahamScan;
 
@@ -433,6 +435,22 @@ public class VPolygon extends Path2D.Double implements VShape {
 		}
 
 		return border;
+	}
+
+	public Rectangle2D.Double getEnclosingRectangle() {
+		double minX = java.lang.Double.MAX_VALUE;
+		double minY = java.lang.Double.MAX_VALUE;
+		double maxX = java.lang.Double.MIN_VALUE;
+		double maxY = java.lang.Double.MIN_VALUE;
+
+		List<VPoint> points = getPoints();
+		for (int i=0; i<points.size(); i++) {
+			minX = Math.min(minX, points.get(i).x);
+			minY = Math.min(minY, points.get(i).y);
+			maxX = Math.max(maxX, points.get(i).x);
+			maxY = Math.max(maxY, points.get(i).y);
+		}
+		return new Rectangle2D.Double(minX, minY, maxX - minX, maxY - minY);
 	}
 
 	@Override

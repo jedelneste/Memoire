@@ -253,6 +253,13 @@ public class TopographyWindow extends JPanel {
 		/* Place Random Pedestrians */
 		Action placeRandomPedestrians = new ActionPlaceRandomPedestrians(Messages.getString(
 				"TopographyCreator.PlaceRandomPedestrians.label"), ICONS_PEDESTRIANS_RND_ICON_PNG, panelModel, undoSupport);
+		/*
+		Action placePedestrianDensityZone = new ActionPlacePedestrianDensityZone(Messages.getString(
+				"TopographyCreator.PlacePedestrianDensityZone.label"),
+				ICONS_PEDESTRIANS_RND_ICON_PNG,
+				panelModel,
+				undoSupport);
+		 */
 
 		/* list of actions for the sub-dialog */
 		Action pen = new ActionSwitchSelectionMode(
@@ -275,6 +282,11 @@ public class TopographyWindow extends JPanel {
 		Action dot = new ActionSwitchSelectionMode(
 				Messages.getString("TopographyCreator.btnCircle.label"),
 				"/icons/paint_method_circle_icon.png","", panelModel, new DrawDotMode(panelModel,
+				undoSupport),
+				basicAction);
+		Action zone = new ActionSwitchSelectionMode(
+				Messages.getString("TopographyCreator.PlacePedestrianDensityZone.label"),
+				"/icons/pedestrians_rnd_icon.png", "", panelModel, new DrawZone(panelModel,
 				undoSupport),
 				basicAction);
 
@@ -305,7 +317,9 @@ public class TopographyWindow extends JPanel {
 		absorbingAreaDrawModes.add(pen2);
 
 		pedestrianDrawModes.add(dot);
+		pedestrianDrawModes.add(zone);
 		pedestrianMiscActions.add(placeRandomPedestrians);
+		//pedestrianMiscActions.add(placePedestrianDensityZone);
 
 		/* open obstacle paint method dialog action */
 		TopographyAction openObstacleDialog = new ActionOpenDrawOptionMenu(
