@@ -22,7 +22,7 @@ public class Run {
 
     public static Path path = Paths.get(projectPath, IOUtils.SCENARIO_DIR);
 
-    public static List<String> optimizers = Arrays.asList("DISCRETE", "BRENT", "PSO", "GRADIENT", "NELDER_MEAD_CIRCLE", "NELDER_MEAD", "EVOLUTION_STRATEGY", "PATTERN_SEARCH", "POWELL");
+    public static List<String> optimizers = Arrays.asList("DISCRETE", "BRENT", "PSO", "NELDER_MEAD_CIRCLE", "NELDER_MEAD", "EVOLUTION_STRATEGY", "POWELL");
 
     private static VadereProject project;
 

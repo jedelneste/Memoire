@@ -51,7 +51,6 @@ public class ActionPlacePedestrianDensityZone extends TopographyAction{
         super(name, panelModel);
         this.panelModel = panelModel;
         this.agentRadius = new AttributesAgent().getRadius();
-
     }
 
     @Override

@@ -27,6 +27,8 @@ import org.vadere.state.scenario.*;
 import org.vadere.util.logging.Logger;
 
 import java.awt.geom.Rectangle2D;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,6 +74,8 @@ public class Simulation implements ControllerProvider{
 	private long lastFrameInMs = 0;
 	private int step = 0;
 	private SimulationState simulationState;
+	private Instant start;
+	private Instant end;
 
 	private String name;
 	private final ScenarioStore scenarioStore;
@@ -211,6 +215,7 @@ public class Simulation implements ControllerProvider{
 		topographyController.preLoop(simTimeInSec, scenarioStore.getAttributesList());
 		isRunSimulation = true;
 		simTimeInSec = startTimeInSec;
+		start = Instant.now();
 
 		for (Model m : models) {
 			m.preLoop(simTimeInSec);
@@ -363,6 +368,8 @@ public class Simulation implements ControllerProvider{
 		} finally {
 			// Always execute postLoop
 			isRunSimulation = false;
+			end = Instant.now();
+			logger.info("Simulation time : " + Duration.between(start, end).toMillis() / 1000.0);
 			threadState = SimThreadState.POST_LOOP;
 			postLoop();
 			threadState = SimThreadState.FINISHED;

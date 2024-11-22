@@ -287,7 +287,14 @@ public class TopographyWindow extends JPanel {
 		Action zone = new ActionSwitchSelectionMode(
 				Messages.getString("TopographyCreator.PlacePedestrianDensityZone.label"),
 				"/icons/pedestrians_rnd_icon.png", "", panelModel, new DrawZone(panelModel,
-				undoSupport),
+				undoSupport,
+				new ActionPlacePedestrianDensityZone(Messages.getString("TopographyCreator.PlacePedestrianDensityZone.label"), panelModel)),
+				basicAction);
+		Action deletePedZone = new ActionSwitchSelectionMode(
+				Messages.getString("TopographyCreator.DeletePedestrianZone.label"),
+				"/icons/redcross_small.png", "", panelModel, new DrawZone(panelModel,
+				undoSupport,
+				new ActionDeletePedestrianZone(Messages.getString("TopographyCreator.DeletePedestrianZone.label"), panelModel, undoSupport)),
 				basicAction);
 
 		List<Action> obstacleAndTargetDrawModes = new ArrayList<>();
@@ -318,6 +325,7 @@ public class TopographyWindow extends JPanel {
 
 		pedestrianDrawModes.add(dot);
 		pedestrianDrawModes.add(zone);
+		pedestrianDrawModes.add(deletePedZone);
 		pedestrianMiscActions.add(placeRandomPedestrians);
 		//pedestrianMiscActions.add(placePedestrianDensityZone);
 

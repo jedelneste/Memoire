@@ -30,16 +30,18 @@ public class DrawZone extends DrawConvexHullMode {
     private Line2D.Double line;
     private int lineCount = 0;
     private List<VPoint> points;
+    private TopographyAction action;
 
 
     private IDrawPanelModel panelModel;
 
-    public DrawZone(IDrawPanelModel panelModel, final UndoableEditSupport undoSupport) {
+    public DrawZone(IDrawPanelModel panelModel, final UndoableEditSupport undoSupport, TopographyAction action) {
         super(panelModel, undoSupport);
         this.panelModel = panelModel;
         this.undoSupport = undoSupport;
         this.polygon = null;
         this.points = new ArrayList<>();
+        this.action = action;
 
     }
 
@@ -112,10 +114,15 @@ public class DrawZone extends DrawConvexHullMode {
 
                         if (scan.isPolytope()) {
                             this.polygon = scan.getPolytope();
-                            ActionPlacePedestrianDensityZone actionPed = new ActionPlacePedestrianDensityZone(Messages.getString("TopographyCreator.PlacePedestrianDensityZone.label"), panelModel);
-                            actionPed.setPolygon(polygon);
-                            actionPed.actionPerformed(null);
-
+                            if (action.getClass() == ActionPlacePedestrianDensityZone.class){
+                                ActionPlacePedestrianDensityZone actionPlace = (ActionPlacePedestrianDensityZone) action;
+                                actionPlace.setPolygon(polygon);
+                                actionPlace.actionPerformed(null);
+                            } else if (action.getClass() == ActionDeletePedestrianZone.class) {
+                                ActionDeletePedestrianZone actionDelete = (ActionDeletePedestrianZone) action;
+                                actionDelete.setPolygon(polygon);
+                                actionDelete.actionPerformed(null);
+                            }
                         }
                         panelModel.notifyObservers();
                     }
