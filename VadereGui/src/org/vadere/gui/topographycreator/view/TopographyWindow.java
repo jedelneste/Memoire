@@ -253,13 +253,6 @@ public class TopographyWindow extends JPanel {
 		/* Place Random Pedestrians */
 		Action placeRandomPedestrians = new ActionPlaceRandomPedestrians(Messages.getString(
 				"TopographyCreator.PlaceRandomPedestrians.label"), ICONS_PEDESTRIANS_RND_ICON_PNG, panelModel, undoSupport);
-		/*
-		Action placePedestrianDensityZone = new ActionPlacePedestrianDensityZone(Messages.getString(
-				"TopographyCreator.PlacePedestrianDensityZone.label"),
-				ICONS_PEDESTRIANS_RND_ICON_PNG,
-				panelModel,
-				undoSupport);
-		 */
 
 		/* list of actions for the sub-dialog */
 		Action pen = new ActionSwitchSelectionMode(
@@ -296,6 +289,9 @@ public class TopographyWindow extends JPanel {
 				undoSupport,
 				new ActionDeletePedestrianZone(Messages.getString("TopographyCreator.DeletePedestrianZone.label"), panelModel, undoSupport)),
 				basicAction);
+		Action unableTarget = new ActionCondemnTarget(
+				Messages.getString("TopographyCreator.CondemnTarget.label"),
+				"/icons/redcross_small.png", panelModel, undoSupport);
 
 		List<Action> obstacleAndTargetDrawModes = new ArrayList<>();
 		List<Action> sourceDrawModes = new ArrayList<>();
@@ -304,6 +300,7 @@ public class TopographyWindow extends JPanel {
 		List<Action> measurementAreaMiscActions = new ArrayList<>();
 		List<Action> pedestrianDrawModes = new ArrayList<>();
 		List<Action> pedestrianMiscActions = new ArrayList<>();
+		List<Action> targetMiscActions = new ArrayList<>();
 
 		obstacleAndTargetDrawModes.add(rectangle);
 		obstacleAndTargetDrawModes.add(pen);
@@ -325,9 +322,10 @@ public class TopographyWindow extends JPanel {
 
 		pedestrianDrawModes.add(dot);
 		pedestrianDrawModes.add(zone);
-		pedestrianDrawModes.add(deletePedZone);
+		//pedestrianDrawModes.add(deletePedZone);
 		pedestrianMiscActions.add(placeRandomPedestrians);
-		//pedestrianMiscActions.add(placePedestrianDensityZone);
+
+		targetMiscActions.add(unableTarget);
 
 		/* open obstacle paint method dialog action */
 		TopographyAction openObstacleDialog = new ActionOpenDrawOptionMenu(
@@ -346,6 +344,14 @@ public class TopographyWindow extends JPanel {
 				panelModel,
 				switchToTargetAction,
 				obstacleAndTargetDrawModes);
+
+		TopographyAction  openTargetValidationDialog = new ActionOpenDrawOptionMenu(
+				"Condemn Target",
+				"/icons/redcross_small.png",
+				"",
+				panelModel,
+				basicAction,
+				targetMiscActions);
 
 		JButton targetChangerButton = new JButton();
 		TopographyAction openTargetChangerDialog = new ActionOpenDrawOptionMenu(
@@ -505,7 +511,7 @@ public class TopographyWindow extends JPanel {
 
 		splitPane.setLeftComponent(pane);
 
-
+		// à ajouter à section B openTargetValidationDialog
 		var sectionB = new ScenarioToolBarSection(openSourceDialog,openTargetDialog);
 		var sectionC = new ScenarioToolBarSection(
 				openTargetChangerDialog,

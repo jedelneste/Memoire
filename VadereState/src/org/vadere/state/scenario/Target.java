@@ -12,7 +12,8 @@ public class Target extends ScenarioElement implements Comparable<Target> {
 	private AttributesTarget attributes;
 	private final Map<Integer, Double> enteringTimes;
 	private final Map<Integer, Double> leavingTimes;
-	
+	private boolean available;
+
 	/**
 	 * Collection of listeners - unordered because it's order is not predictable
 	 * (at least not for clients).
@@ -34,12 +35,19 @@ public class Target extends ScenarioElement implements Comparable<Target> {
 		this.attributes = attributes;
 		this.enteringTimes = enteringTimes;
 		this.leavingTimes = leavingTimes;
+		this.available = true;
 	}
 
 
 	public boolean isAbsorbing() {
 		return attributes.isAbsorbing();
 	}
+
+	public boolean isAvailable() {
+		return available;
+	}
+
+	public void setAvailable(boolean available) { this.available = available; }
 
 	public int getParallelWaiters() {
 		return attributes.getParallelEvents();

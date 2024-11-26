@@ -73,19 +73,6 @@ public class ActionPlaceRandomPedestrians extends TopographyAction {
 				}
 				iter ++;
 			}
-			/*
-			for (int i = 0; i < numOfPeds; i++) {
-				IPoint point = pointProvider.stream(dist ->  dist > 0.25).findFirst().get();
-				VCircle newPosition = new VCircle(point.getX(), point.getY(), this.agentRadius);
-
-				if (!checkOverlap(newPosition)) {
-					int pedId = firstPedId + i;
-					Pedestrian pedestrian = createPedestrian(dialog, topography, random, binomialDistribution, point, pedId);
-					addPedestrianToTopography(pedestrian);
-					createdPeds++;
-				}
-			}
-			 */
 
 			if (numOfPeds != createdPeds) {
 				showWarning(numOfPeds, createdPeds);
@@ -118,7 +105,7 @@ public class ActionPlaceRandomPedestrians extends TopographyAction {
 
 		Pedestrian pedestrian = new Pedestrian(attributesAgent, random);
 		pedestrian.setPosition(new VPoint(point));
-		pedestrian.setTargets(getTargetList(dialog.getTargetOption(), dialog.getTargetList(), point));
+		pedestrian.setTargets(getTargetList(dialog.getTargetOption(), dialog.getTargetList(), pedestrian));
 
 		if (binomialDistribution.sample() == BINOMIAL_DISTRIBUTION_SUCCESS_VALUE) {
 			pedestrian.setGroupMembership(GroupMembership.IN_GROUP);
@@ -129,7 +116,7 @@ public class ActionPlaceRandomPedestrians extends TopographyAction {
 		return pedestrian;
 	}
 
-	private LinkedList<Integer> getTargetList(TARGET_OPTION selectedOption, LinkedList<Integer> dialogList, IPoint point) {
+	private LinkedList<Integer> getTargetList(TARGET_OPTION selectedOption, LinkedList<Integer> dialogList, Pedestrian pedestrian) {
 		LinkedList<Integer> targetList = new LinkedList<>();
 
 		if (selectedOption == TARGET_OPTION.EMPTY) {
@@ -146,7 +133,7 @@ public class ActionPlaceRandomPedestrians extends TopographyAction {
 		} else if (selectedOption == TARGET_OPTION.NEAREST) {
 			if (!getScenarioPanelModel().getTopography().getTargets().isEmpty()) {
 				List<Target> targets = getScenarioPanelModel().getTopography().getTargets();
-				int target = findNearestTarget(targets, point);
+				int target = pedestrian.findNearestTarget(targets);
 				targetList.add(target);
 			}
 	}
@@ -160,26 +147,6 @@ public class ActionPlaceRandomPedestrians extends TopographyAction {
 		getScenarioPanelModel().setElementHasChanged(agentWrapper);
 	}
 
-	/**
-	 * @param targets : liste de targets
-	 * @param point : point dans le plan
-	 * @return l'identifier de la target la plus proche du point
-	 */
-	private int findNearestTarget(List<Target> targets, IPoint point) {
-		if (targets.size() == 1){
-			return targets.get(0).getId();
-		}
-		double mindist = Double.MAX_VALUE;
-		int targetId = -1;
-		for (Target target : targets) {
-			double distance = point.distance(target.getShape().getCentroid());
-			if (distance < mindist) {
-				mindist = distance;
-				targetId = target.getId();
-			}
-		}
-		return targetId;
-	}
 
 	private void showWarning(int numOfPeds, int createdPeds) {
 		String message = String.format("%s: %d\n%s: %d",

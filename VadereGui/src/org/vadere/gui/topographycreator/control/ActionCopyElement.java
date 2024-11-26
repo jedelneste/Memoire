@@ -7,20 +7,20 @@ import org.vadere.state.scenario.ScenarioElement;
 
 /**
  * Copies the reference of an ScenarioElement and put it into the panelmodel.
- * 
+ *
  *
  */
 public class ActionCopyElement extends TopographyAction {
 
-	private static final long serialVersionUID = -5926543529036212640L;
+    private static final long serialVersionUID = -5926543529036212640L;
 
-	public ActionCopyElement(final String name, final IDrawPanelModel model) {
-		super(name, model);
-	}
+    public ActionCopyElement(final String name, final IDrawPanelModel model) {
+        super(name, model);
+    }
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		ScenarioElement element = getScenarioPanelModel().getSelectedElement();
-		getScenarioPanelModel().setCopiedElement(element);
-	}
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        ScenarioElement element = getScenarioPanelModel().getSelectedElement();
+        getScenarioPanelModel().setCopiedElement(element);
+    }
 }

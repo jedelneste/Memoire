@@ -18,7 +18,7 @@ public class Run {
 
     private static Logger logger = Logger.getLogger(Run.class);
 
-    public static String projectPath = "/home/acer/Documents/Master INFO/Mémoire/vadere/Scenarios/Different Scenarios/";
+    public static String projectPath = "/home/acer/Documents/Master INFO/Mémoire/vadere/Scenarios/OSMSimulation/";
 
     public static Path path = Paths.get(projectPath, IOUtils.SCENARIO_DIR);
 
@@ -27,14 +27,19 @@ public class Run {
     private static VadereProject project;
 
 
+
+
     public static void main(String[] args) throws IOException {
         project = IOVadere.readProject(projectPath);
 
         LinkedList<SimulationRun> simulationsToRun = new LinkedList<>();
-        int scenarioIdx;
+        int scenarioIdx = 2;
+
         String csvFile;
+        /*
         switch (args.length){
             case 0:
+
                 logger.info("Run all the scenarios with all the optimizers");
                 csvFile = "resultsSimulations/allscenarios.csv";
                 for (int i=1; i<11; i++){
@@ -66,6 +71,13 @@ public class Run {
             default:
                 throw new IllegalArgumentException("Invalid number of arguments");
         }
+         */
+
+        csvFile = "resultsSimulations/scenario" + scenarioIdx + ".csv";
+        logger.info("Run scenario {} with all optimizers", scenarioIdx);
+        for (String opti : optimizers){
+            simulationsToRun.add(new SimulationRun(project, scenarioIdx, opti));
+        }
 
         try (CSVWriter writer = new CSVWriter(new FileWriter(csvFile))) {
 
@@ -78,7 +90,6 @@ public class Run {
                 logger.info(simulationRun.getOptimizerName());
                 String[] line = {Integer.toString(simulationRun.getScenarioIdx()), simulationRun.getOptimizerName(), Double.toString(simulationRun.getEvacuationTime()), Double.toString(simulationRun.getSimulationTime())};
                 writer.writeNext(line);
-
             }
 
 

@@ -441,7 +441,13 @@ public class Topography implements DynamicElementMover{
 	}
 
 	public List<Target> getTargets() {
-		return targets;
+		List<Target> availableTargets = new ArrayList<>();
+		for (Target target : targets) {
+			if (target.isAvailable()){
+				availableTargets.add(target);
+			}
+		}
+		return availableTargets;
 	}
 
 	public List<TargetChanger> getTargetChangers() {

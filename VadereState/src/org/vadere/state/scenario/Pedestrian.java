@@ -13,6 +13,7 @@ import org.vadere.state.simulation.FootStep;
 import org.vadere.state.simulation.FootstepHistory;
 import org.vadere.state.simulation.VTrajectory;
 import org.vadere.state.types.ScenarioElementType;
+import org.vadere.util.geometry.shapes.IPoint;
 import org.vadere.util.geometry.shapes.VPoint;
 
 import java.util.*;
@@ -342,5 +343,49 @@ public class Pedestrian extends Agent {
     @Override
     public void setTargets(LinkedList<Integer> target) {
         super.setTargets(target);
+    }
+
+    public void setTarget(int targetId) {
+        LinkedList<Integer> targets = new LinkedList<>();
+        targets.add(targetId);
+        setTargets(targets);
+    }
+
+    public void setNearestTarget(List<Target> targets){
+        LinkedList<Integer> nearestTarget = new LinkedList<>();
+        VPoint position = getPosition();
+        if (targets.size() == 1){
+            nearestTarget.add(targets.get(0).getId());
+
+        } else {
+            double mindist = Double.MAX_VALUE;
+            int targetId = -1;
+            for (Target target : targets) {
+                double distance = position.distance(target.getShape().getCentroid());
+                if (distance < mindist) {
+                    mindist = distance;
+                    targetId = target.getId();
+                }
+            }
+            nearestTarget.add(targetId);
+        }
+        setTargets(nearestTarget);
+    }
+
+    public int findNearestTarget(List<Target> targets) {
+        VPoint position = getPosition();
+        if (targets.size() == 1){
+            return targets.get(0).getId();
+        }
+        double mindist = Double.MAX_VALUE;
+        int targetId = -1;
+        for (Target target : targets) {
+            double distance = position.distance(target.getShape().getCentroid());
+            if (distance < mindist) {
+                mindist = distance;
+                targetId = target.getId();
+            }
+        }
+        return targetId;
     }
 }

@@ -108,7 +108,7 @@ public class ActionPlacePedestrianDensityZone extends TopographyAction{
 
         Pedestrian pedestrian = new Pedestrian(attributesAgent, random);
         pedestrian.setPosition(new VPoint(point));
-        pedestrian.setTargets(getTargetList(dialog.getTargetOption(), point));
+        pedestrian.setTargets(getTargetList(dialog.getTargetOption(), pedestrian));
 
         if (binomialDistribution.sample() == BINOMIAL_DISTRIBUTION_SUCCESS_VALUE) {
             pedestrian.setGroupMembership(GroupMembership.IN_GROUP);
@@ -136,7 +136,7 @@ public class ActionPlacePedestrianDensityZone extends TopographyAction{
         return pedOverlap  || targetOverlap;
     }
 
-    private LinkedList<Integer> getTargetList(ActionPedestrianDensityZoneDialog.TARGET_OPTION_ZONE selectedOption, IPoint point) {
+    private LinkedList<Integer> getTargetList(ActionPedestrianDensityZoneDialog.TARGET_OPTION_ZONE selectedOption, Pedestrian pedestrian) {
         LinkedList<Integer> targetList = new LinkedList<>();
 
         if (selectedOption == ActionPedestrianDensityZoneDialog.TARGET_OPTION_ZONE.RANDOM) {
@@ -149,7 +149,7 @@ public class ActionPlacePedestrianDensityZone extends TopographyAction{
         } else if (selectedOption == ActionPedestrianDensityZoneDialog.TARGET_OPTION_ZONE.NEAREST) {
             if (!getScenarioPanelModel().getTopography().getTargets().isEmpty()) {
                 List<Target> targets = getScenarioPanelModel().getTopography().getTargets();
-                int target = findNearestTarget(targets, point);
+                int target = pedestrian.findNearestTarget(targets);
                 targetList.add(target);
             }
         }
@@ -161,22 +161,6 @@ public class ActionPlacePedestrianDensityZone extends TopographyAction{
         AgentWrapper agentWrapper = new AgentWrapper(pedestrian);
         getScenarioPanelModel().addShape(agentWrapper);
         getScenarioPanelModel().setElementHasChanged(agentWrapper);
-    }
-
-    private int findNearestTarget(List<Target> targets, IPoint point) {
-        if (targets.size() == 1){
-            return targets.get(0).getId();
-        }
-        double mindist = Double.MAX_VALUE;
-        int targetId = -1;
-        for (Target target : targets) {
-            double distance = point.distance(target.getShape().getCentroid());
-            if (distance < mindist) {
-                mindist = distance;
-                targetId = target.getId();
-            }
-        }
-        return targetId;
     }
 
     public void showInformation(int createdPeds, int numOfPeds) {

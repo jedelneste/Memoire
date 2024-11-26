@@ -13,6 +13,7 @@ import org.vadere.util.logging.Logger;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.DecimalFormat;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -28,18 +29,22 @@ public class SimulationRun {
     private static Scenario scenario;
     private int scenarioIdx;
     private String optimizerName;
+    private VadereProject vadereProject;
 
     private final HashMap<String, Double> results = new HashMap<>();
 
     public SimulationRun(VadereProject project, int idx, String optimizer) {
         this.scenarioIdx = idx;
         this.optimizerName = optimizer;
-        scenario = project.getScenarioByName("Scenario"+scenarioIdx);
-        scenario.getScenarioStore().getAttributesOSM().setOptimizationType(OptimizationType.valueOf(optimizer));
+        this.vadereProject = project;
+
     }
 
 
     public void run() throws IOException {
+
+        scenario = vadereProject.getScenarioByName("Scenario"+scenarioIdx);
+        scenario.getScenarioStore().getAttributesOSM().setOptimizationType(OptimizationType.valueOf(optimizerName));
 
         logger.info("Running scenario {} with optimizer {}", scenarioIdx, optimizerName);
 
@@ -55,7 +60,9 @@ public class SimulationRun {
 
         double simulationTime = time.toMillis() / 1000.0;
 
-        results.put("EvacuationTime", evacuationTimeSimulated);
+        DecimalFormat df = new DecimalFormat("#.00");
+
+        results.put("EvacuationTime", Math.round(evacuationTimeSimulated * 100.0) / 100.0);
         results.put("SimulationTime", simulationTime);
     }
 
