@@ -1,5 +1,8 @@
 package org.vadere.simulator.control.simulation;
 
+import it.unimi.dsi.fastutil.Hash;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.vadere.simulator.control.factory.SourceControllerFactory;
 import org.vadere.simulator.control.psychology.cognition.models.ICognitionModel;
 import org.vadere.simulator.control.psychology.perception.StimulusController;
@@ -24,6 +27,9 @@ import org.vadere.state.psychology.perception.json.StimulusInfo;
 import org.vadere.state.psychology.perception.types.ElapsedTime;
 import org.vadere.state.psychology.perception.types.Stimulus;
 import org.vadere.state.scenario.*;
+import org.vadere.state.simulation.FootStep;
+import org.vadere.util.geometry.shapes.VPoint;
+import org.vadere.util.geometry.shapes.Vector2D;
 import org.vadere.util.logging.Logger;
 
 import java.awt.geom.Rectangle2D;
@@ -90,6 +96,9 @@ public class Simulation implements ControllerProvider{
 	private SimulationResult simulationResult;
 	private final StimulusController stimulusController;
 	private final ScenarioCache scenarioCache;
+	private boolean keepTrackTrajectory;
+	private HashMap<Integer, ArrayList<Pair<Double, VPoint>>> trajectories;
+	private HashMap<Integer, ArrayList<Pair<Double, Vector2D>>> velocities;
 
 
 	public Simulation(MainModel mainModel, IPerceptionModel perceptionModel,
@@ -99,7 +108,18 @@ public class Simulation implements ControllerProvider{
 					  List<PassiveCallback> passiveCallbacks, Random random,
 					  ProcessorManager processorManager, SimulationResult simulationResult,
 					  List<RemoteRunListener> remoteRunListeners, boolean singleStepMode,
-					  ScenarioCache scenarioCache) {
+					  ScenarioCache scenarioCache){
+		this(mainModel, perceptionModel, cognitionModel, startTimeInSec, name, scenarioStore, domain, passiveCallbacks, random, processorManager, simulationResult, remoteRunListeners, singleStepMode, scenarioCache, false);
+	}
+
+	public Simulation(MainModel mainModel, IPerceptionModel perceptionModel,
+					  ICognitionModel cognitionModel, double startTimeInSec,
+					  final String name, ScenarioStore scenarioStore,
+					  final Domain domain,
+					  List<PassiveCallback> passiveCallbacks, Random random,
+					  ProcessorManager processorManager, SimulationResult simulationResult,
+					  List<RemoteRunListener> remoteRunListeners, boolean singleStepMode,
+					  ScenarioCache scenarioCache, boolean keepTrackTrajectory) {
 
 		this.name = name;
 		this.mainModel = mainModel;
@@ -120,6 +140,7 @@ public class Simulation implements ControllerProvider{
 		this.simTimeInSec = startTimeInSec;
 		this.simulationResult = simulationResult;
 		this.scenarioCache = scenarioCache;
+		this.keepTrackTrajectory = keepTrackTrajectory;
 
 		this.models = mainModel.getSubmodels();
 		this.sourceControllerFactory = mainModel.getSourceControllerFactory();
@@ -216,6 +237,17 @@ public class Simulation implements ControllerProvider{
 		isRunSimulation = true;
 		simTimeInSec = startTimeInSec;
 		start = Instant.now();
+
+		if (keepTrackTrajectory) {
+			trajectories = new HashMap<>();
+			for (Pedestrian pedestrian : topography.getElements(Pedestrian.class)){
+				trajectories.put(pedestrian.getId(), new ArrayList<>());
+			}
+			velocities = new HashMap<>();
+			for (Pedestrian pedestrian : topography.getElements(Pedestrian.class)){
+				velocities.put(pedestrian.getId(), new ArrayList<>());
+			}
+		}
 
 		for (Model m : models) {
 			m.preLoop(simTimeInSec);
@@ -353,10 +385,17 @@ public class Simulation implements ControllerProvider{
 					simTimeInSec += Math.min(attributesSimulation.getSimTimeStepLength(), runTimeInSec + startTimeInSec - simTimeInSec);
 				}
 
+				if (keepTrackTrajectory) {
+					for (Pedestrian pedestrian : topography.getElements(Pedestrian.class)){
+						trajectories.get(pedestrian.getId()).add(new ImmutablePair<>(simTimeInSec, pedestrian.getPosition()));
+						velocities.get(pedestrian.getId()).add(new ImmutablePair<>(simTimeInSec, pedestrian.getVelocity()));
+					}
+				}
+
 
 				//remove comment to fasten simulation for evacuation simulations
 				//this.simulationState.getTopography().getPedestrianDynamicElements().getElements().size()
-				if (topography.getElements(Pedestrian.class).size()==4){
+				if (topography.getElements(Pedestrian.class).size()==31){
 					Object a = null;
 				}
 				if (topography.getElements(Pedestrian.class).isEmpty()){
@@ -532,6 +571,14 @@ public class Simulation implements ControllerProvider{
 		this.waitForSimCommand = waitForSimCommand;
 	}
 
+	public HashMap<Integer, ArrayList<Pair<Double, VPoint>>> getTrajectories(){
+		return trajectories;
+	}
+
+	public HashMap<Integer, ArrayList<Pair<Double, Vector2D>>> getVelocities(){
+		return velocities;
+	}
+
 	synchronized void nextSimCommand(double simulateUntilInSec){
 		this.simulateUntilInSec = simulateUntilInSec;
 		waitForSimCommand = false;
@@ -604,6 +651,10 @@ public class Simulation implements ControllerProvider{
 
 	public StimulusController getStimulusController(){
 		return stimulusController;
+	}
+
+	public int getNumIterations() {
+		return this.step;
 	}
 
 	@Override

@@ -73,6 +73,8 @@ public class ScenarioRun implements Runnable {
 
 	protected Simulation simulation;
 
+	private boolean keepTrackTrajectory;
+
 	protected boolean singleStepMode = false;
 
 	// the processor is null if no output is written i.e. if scenarioStore.attributesSimulation.isWriteSimulationData() is false.
@@ -91,6 +93,10 @@ public class ScenarioRun implements Runnable {
 		this.singleStepMode = singleStepMode;
 	}
 
+	public ScenarioRun(final Scenario scenario, RunnableFinishedListener scenarioFinishedListener, Path scenarioFilePath, ScenarioCache scenarioCache, boolean keepTrackTrajectory) {
+		this(scenario, IOUtils.OUTPUT_DIR, false, scenarioFinishedListener, scenarioFilePath, scenarioCache, keepTrackTrajectory);
+	}
+
 	public ScenarioRun(final Scenario scenario, RunnableFinishedListener scenarioFinishedListener, Path scenarioFilePath, ScenarioCache scenarioCache) {
 		this(scenario, IOUtils.OUTPUT_DIR, scenarioFinishedListener, scenarioFilePath, scenarioCache);
 	}
@@ -99,8 +105,12 @@ public class ScenarioRun implements Runnable {
 		this(scenario, outputDir, false, scenarioFinishedListener, scenarioFilePath, scenarioCache);
 	}
 
+	public ScenarioRun(final Scenario scenario, final String outputDir, boolean overwriteTimestampSetting, final RunnableFinishedListener scenarioFinishedListener, Path scenarioFilePath, ScenarioCache scenarioCache){
+		this(scenario, outputDir, overwriteTimestampSetting, scenarioFinishedListener, scenarioFilePath, scenarioCache, false);
+	}
+
 	// if overwriteTimestampSetting is true do note use timestamp in output directory
-	public ScenarioRun(final Scenario scenario, final String outputDir, boolean overwriteTimestampSetting, final RunnableFinishedListener scenarioFinishedListener, Path scenarioFilePath, ScenarioCache scenarioCache) {
+	public ScenarioRun(final Scenario scenario, final String outputDir, boolean overwriteTimestampSetting, final RunnableFinishedListener scenarioFinishedListener, Path scenarioFilePath, ScenarioCache scenarioCache, boolean keepTrackTrajectory) {
 		this.scenario = scenario;
 		this.scenario.setSimulationRunning(true); // create copy of ScenarioStore and redirect getScenarioStore to this copy for simulation.
 		this.scenarioStore = scenario.getScenarioStore();
@@ -110,6 +120,7 @@ public class ScenarioRun implements Runnable {
 		this.simulationResult = new SimulationResult(scenario.getName());
 		this.scenarioFilePath = scenarioFilePath;
 		this.scenarioCache = scenarioCache;
+		this.keepTrackTrajectory = keepTrackTrajectory;
 	}
 
 
@@ -193,7 +204,7 @@ public class ScenarioRun implements Runnable {
 						passiveCallbacks, random,
 						processorManager, simulationResult,
 						remoteRunListeners, singleStepMode,
-						scenarioCache);
+						scenarioCache, keepTrackTrajectory);
 			}
 
 			simulation.run();

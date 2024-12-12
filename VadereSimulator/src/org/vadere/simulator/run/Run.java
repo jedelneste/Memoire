@@ -1,7 +1,6 @@
-package org.vadere.simulator;
+package org.vadere.simulator.run;
 
 import au.com.bytecode.opencsv.CSVWriter;
-import org.vadere.simulator.control.simulation.SimulationRun;
 import org.vadere.simulator.projects.VadereProject;
 import org.vadere.simulator.projects.io.IOVadere;
 import org.vadere.util.io.IOUtils;
@@ -32,7 +31,7 @@ public class Run {
     public static void main(String[] args) throws IOException {
         project = IOVadere.readProject(projectPath);
 
-        LinkedList<SimulationRun> simulationsToRun = new LinkedList<>();
+        LinkedList<RunOSMSimulation> simulationsToRun = new LinkedList<>();
         int scenarioIdx = 2;
 
         String csvFile;
@@ -76,7 +75,7 @@ public class Run {
         csvFile = "resultsSimulations/scenario" + scenarioIdx + ".csv";
         logger.info("Run scenario {} with all optimizers", scenarioIdx);
         for (String opti : optimizers){
-            simulationsToRun.add(new SimulationRun(project, scenarioIdx, opti));
+            simulationsToRun.add(new RunOSMSimulation(project, scenarioIdx, opti));
         }
 
         try (CSVWriter writer = new CSVWriter(new FileWriter(csvFile))) {
@@ -84,11 +83,11 @@ public class Run {
             String[] header = {"Scenario", "Optimizer", "EvacuationTime", "SimulationTime"};
             writer.writeNext(header);
 
-            for (SimulationRun simulationRun : simulationsToRun){
+            for (RunOSMSimulation simulationRun : simulationsToRun){
                 simulationRun.run();
 
-                logger.info(simulationRun.getOptimizerName());
-                String[] line = {Integer.toString(simulationRun.getScenarioIdx()), simulationRun.getOptimizerName(), Double.toString(simulationRun.getEvacuationTime()), Double.toString(simulationRun.getSimulationTime())};
+
+                String[] line = {Integer.toString(0), " ", Double.toString(simulationRun.getEvacuationTime()), Double.toString(simulationRun.getSimulationTime())};
                 writer.writeNext(line);
             }
 
