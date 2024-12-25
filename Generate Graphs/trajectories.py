@@ -3,7 +3,7 @@ import json
 
 def draw_scene(jsonFile):
     
-    directory = "../resultsSimulations/json/" 
+    directory = "../resultsSimulations/trajectories/" 
     
     with open(directory + jsonFile + ".json", 'r') as file:
         data = json.load(file)

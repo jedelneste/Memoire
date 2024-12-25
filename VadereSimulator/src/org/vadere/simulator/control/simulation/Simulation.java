@@ -593,6 +593,10 @@ public class Simulation implements ControllerProvider{
 		notify();
 	}
 
+	public double getSimTimeStepLength() {
+		return attributesSimulation.getSimTimeStepLength();
+	}
+
 	synchronized void addTargetChangerController(TargetChangerController controller){
 		targetChangerControllers.add(controller);
 	}

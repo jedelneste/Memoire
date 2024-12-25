@@ -40,7 +40,7 @@ public class TrajectoriesInfoRun {
 
             String scenarioName = scenario.getName();
 
-            String jsonFile = "resultsSimulations/json/" + fileName + "_" + scenarioName + ".json";
+            String jsonFile = "resultsSimulations/trajectories/" + fileName + "_" + scenarioName + ".json";
 
             logger.info("Running scenario " + scenarioName);
 
@@ -120,21 +120,4 @@ public class TrajectoriesInfoRun {
         }
         return obstacleInfo;
     }
-
-    /*
-    public static HashMap<Integer, ArrayList<VPoint>> getRelevantInformations(HashMap<Integer, HashMap<Double, VPoint>> trajectories){
-        HashMap<Integer, ArrayList<VPoint>> relevantInformations = new HashMap<>();
-        for (int idx : trajectories.keySet()) {
-            ArrayList<FootStep> footSteps = trajectories.get(idx);
-            ArrayList<VPoint> relevantFootSteps = new ArrayList<>();
-            for (FootStep footStep : footSteps) {
-                if (footStep != null){
-                    relevantFootSteps.add(footStep.getStart());
-                }
-            }
-            relevantInformations.put(idx, relevantFootSteps);
-        }
-        return relevantInformations;
-    }
-     */
 }
