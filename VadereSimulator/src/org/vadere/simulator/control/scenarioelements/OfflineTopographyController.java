@@ -60,6 +60,7 @@ public class OfflineTopographyController extends ScenarioElementController  {
 		} else {
 			// add distance function
 			ScenarioCache cache = (ScenarioCache) VadereContext.getCtx(getTopography()).getOrDefault("cache", ScenarioCache.empty());
+			//Computes for each point in the topography the minimal distance between this point and the nearest obstacle
 			PotentialFieldDistancesBruteForce distanceField = new PotentialFieldDistancesBruteForce(
 					getTopography().getObstacles().stream().map(obs -> obs.getShape()).collect(Collectors.toList()),
 					new VRectangle(getTopography().getBounds()),

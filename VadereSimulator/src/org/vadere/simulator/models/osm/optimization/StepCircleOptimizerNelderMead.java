@@ -42,6 +42,7 @@ public class StepCircleOptimizerNelderMead extends StepCircleOptimizer {
 		double[] newPosition = new double[2];
 		double[] minimum = position;
 		double[] newMinimum = {0, 0};
+		//C'est ici qu'on recalcule le potentiel pour chaque piéton
 		double minimumValue = pedestrian.getPotential(pedestrian.getPosition());
 		double newMinimumValue = 0;
 		double step = stepSize / 2;

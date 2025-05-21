@@ -84,7 +84,7 @@ public abstract class ODEModel<T extends DynamicElement, TAttributes extends Att
 		if (!dynamicElements.isEmpty()) {
 
 			// initialize the function vector for the equations
-			y = new double[equations.getDimension()];
+			y = new double[equations.getDimension()]; //Nbre pedestrian*4 dimensions : 2 for position and 2 for velocity
 			// fill initial data with ped data
 			double[] position = new double[2];
 			double[] velocity = new double[2];

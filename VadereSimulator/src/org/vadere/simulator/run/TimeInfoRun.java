@@ -30,7 +30,7 @@ public class TimeInfoRun {
     public TimeInfoRun(String projectPath, ArrayList<Scenario> scenarios, String fileName) {
 
         Path path = Paths.get(projectPath, IOUtils.SCENARIO_DIR);
-        String csvFile = "resultsSimulations/" + fileName + ".csv";
+        String csvFile = "Simulation results/" + fileName + ".csv";
 
         try (CSVWriter writer = new CSVWriter(new FileWriter(csvFile))) {
 
