@@ -7,6 +7,7 @@ import org.vadere.simulator.control.simulation.Simulation;
 import org.vadere.simulator.projects.Scenario;
 import org.vadere.simulator.projects.SimulationResult;
 import org.vadere.simulator.utils.cache.ScenarioCache;
+import org.vadere.state.scenario.Pedestrian;
 import org.vadere.util.io.IOUtils;
 import org.vadere.util.logging.Logger;
 
@@ -19,17 +20,46 @@ import java.time.Duration;
 import java.util.ArrayList;
 
 /**
- * Class to run several scenarios and get the simulated evacuation time, the number
- * of iterations, and the simulation execution time in a csv file.
+ * Class to run several scenarios.
  */
 
-public class TimeInfoRun {
+public class SeveralRuns {
 
-    Logger logger = Logger.getLogger(TimeInfoRun.class);
+    Logger logger = Logger.getLogger(SeveralRuns.class);
+    private String projectPath;
+    private ArrayList<Scenario> scenarios;
 
-    public TimeInfoRun(String projectPath, ArrayList<Scenario> scenarios, String fileName) {
+    public SeveralRuns(String projectPath, ArrayList<Scenario> scenarios) {
+        this.projectPath = projectPath;
+        this.scenarios = scenarios;
+    }
 
-        Path path = Paths.get(projectPath, IOUtils.SCENARIO_DIR);
+    /**
+     * Simple run
+     */
+    public void run(){
+        Path path = Paths.get(this.projectPath, IOUtils.SCENARIO_DIR);
+
+        for (Scenario scenario : this.scenarios) {
+
+            String scenarioName = scenario.getName();
+
+            logger.info("Running scenario " + scenarioName);
+
+            final ScenarioRun scenarioRun = new ScenarioRun(scenario, null, path.resolve(IOUtils.SCENARIO_DIR).resolve(scenario.getName() + IOUtils.SCENARIO_FILE_EXTENSION), ScenarioCache.load(scenario, path.resolve(IOUtils.SCENARIO_DIR)), false);
+            scenarioRun.run();
+            Simulation simulation = scenarioRun.getSimulation();
+            SimulationResult result = scenarioRun.getSimulationResult();
+        }
+
+    }
+
+    /**
+     * Runs the scenarios and retrieve the simulated evacuation time, the number
+     * of iterations, and the simulation execution time in a csv file
+     */
+    public void runTimeInfo(String fileName){
+        Path path = Paths.get(this.projectPath, IOUtils.SCENARIO_DIR);
         String csvFile = "Simulation results/" + fileName + ".csv";
 
         try (CSVWriter writer = new CSVWriter(new FileWriter(csvFile))) {
@@ -37,7 +67,7 @@ public class TimeInfoRun {
             String[] header = {"Scenario", "simulation time", "iterations", "execution time"};
             writer.writeNext(header);
 
-            for (Scenario scenario : scenarios) {
+            for (Scenario scenario : this.scenarios) {
 
                 String scenarioName = scenario.getName();
 
@@ -47,7 +77,7 @@ public class TimeInfoRun {
                 scenarioRun.run();
                 Simulation simulation = scenarioRun.getSimulation();
                 SimulationResult result = scenarioRun.getSimulationResult();
-                String[] line = getLine(simulation, result, scenarioName);
+                String[] line = getLineTime(simulation, result, scenarioName);
                 writer.writeNext(line);
             }
 
@@ -55,11 +85,10 @@ public class TimeInfoRun {
             logger.error(e);
             e.printStackTrace();
         }
-
-
     }
 
-    private static String [] getLine(Simulation simulation, SimulationResult result, String scenarioName) {
+
+    private static String [] getLineTime(Simulation simulation, SimulationResult result, String scenarioName) {
 
 
         double simulatedEvacuationTime = simulation.getCurrentTime();

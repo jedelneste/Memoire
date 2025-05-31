@@ -395,9 +395,6 @@ public class Simulation implements ControllerProvider{
 
 				//remove comment to fasten simulation for evacuation simulations
 				//this.simulationState.getTopography().getPedestrianDynamicElements().getElements().size()
-				if (topography.getElements(Pedestrian.class).size()==5){
-					Object a = null;
-				}
 				if (topography.getElements(Pedestrian.class).isEmpty()){
 					isRunSimulation = false;
 				}

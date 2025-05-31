@@ -33,10 +33,10 @@ def plotBox(directory):
         
     ax.set_xticklabels(labels)
 
-    plt.title("Distribution of the evacuation time")
-    plt.ylabel("Evacuation time [s]")
+    plt.title("Distribution of the evacuation time", fontsize=16)
+    plt.ylabel("Evacuation time [s]", fontsize=14)
     
-    plt.savefig("graphs/stability/evacutionTime.png")
+    plt.savefig("graphs/stability/evacutionTime.pdf")
     plt.show()
     
 

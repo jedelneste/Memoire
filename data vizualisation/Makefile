@@ -1,5 +1,5 @@
 # Liste des scripts Python
-SCRIPTS = collisions.py evacuation_times.py fd.py stability.py scalability.py trajectories.py
+SCRIPTS = collisions.py evacuation_times.py fd.py stability.py scalability.py trajectories.py experimental_study.py
 
 # Commande Python
 PYTHON = python3
@@ -31,6 +31,10 @@ scalability:
 trajectories:
 	@echo "==> Running trajectories.py"
 	$(PYTHON) trajectories.py
+
+experiment:
+	@echo "==> Running experimental_study.py"
+	$(PYTHON) experimental_study.py
 
 # Target pour tout exécuter
 all: $(SCRIPTS:.py=)

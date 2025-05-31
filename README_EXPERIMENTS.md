@@ -7,6 +7,7 @@ Different scenario folders were created for the different simulations carried ou
 * **Collisions** : Simulations to compute the number of collisions between pedestrians
 * **DifferentScenarios** : Simulations to test the models on different real-life scenarios
 * **ExecutionTime** : Simulations to compute the execution time of the models
+* **ExperimentalStudy**: Study of the influence of the bottleneck width on the pedestrian flow
 * **FundamentalDiagram** : Simulations to build the fundamental diagram
 * **GN_VP** : Variation of parameters of the Gradient Navigation Model
 * **OSM_VP_Search** : First part of the variation of parameters of the Optimal Step Model

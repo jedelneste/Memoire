@@ -42,7 +42,7 @@ def plotTrajectories(directory, models, topography, target, obstacles):
             ax.plot(trajectory_x, trajectory_y, color='blue')
         
         plt.legend()
-        plt.savefig(f"graphs/{directory}{name}.png")
+        plt.savefig(f"graphs/{directory}{name}.pdf")
         plt.show()
     
 

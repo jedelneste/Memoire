@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import csv
 
 
-def plotsSimpleScenario(directory, csvFiles, colors):
+def plotsSimpleScenario(directory, csvFiles, colors, markers):
     
     data = {}
 
@@ -25,19 +25,19 @@ def plotsSimpleScenario(directory, csvFiles, colors):
         n = tupl[0]
         x = tupl[1]["peds"]
         y = tupl[1]["executionTime"]
-        plt.plot(x, y, '-o', color=colors[idx], label=n)
+        plt.plot(x, y, '-'+markers[idx], color=colors[idx], label=n)
     
     plt.legend()
-    plt.title("Execution times of one simulation with different numbers of pedestrians")
-    plt.xlabel("Number of pedestrians")
-    plt.ylabel("Execution time [s]")
-    plt.savefig("graphs/scalability/executionTimesSimpleScenario.png")
+    plt.title("Execution times of one simulation with different \n numbers of pedestrians", fontsize=16)
+    plt.xlabel("Number of pedestrians", fontsize=14)
+    plt.ylabel("Execution time [s]", fontsize=14)
+    plt.savefig("graphs/scalability/executionTimesSimpleScenario.pdf")
     plt.show()
         
 
 
 
-def plotsComplexScenario(directory, csvFiles, colors):
+def plotsComplexScenario(directory, csvFiles, colors, markers):
     data = {}
     
     
@@ -62,13 +62,13 @@ def plotsComplexScenario(directory, csvFiles, colors):
             n = tupl[0]
             x = tupl[1]["peds"]
             y = tupl[1]["executionTime"]
-            plt.plot(x, y, '-o', color=colors[idx], label=n)
+            plt.plot(x, y, '-'+markers[idx], color=colors[idx], label=n)
         
         plt.legend()
-        plt.title("Execution times of one simulation with different numbers of pedestrians")
-        plt.xlabel("Number of pedestrians")
-        plt.ylabel("Execution time [s]")
-        plt.savefig("graphs/scalability/executionTimesComplexScenario.png")
+        plt.title("Execution times of one simulation with different \n numbers of pedestrians", fontsize=16)
+        plt.xlabel("Number of pedestrians", fontsize=14)
+        plt.ylabel("Execution time [s]", fontsize=14)
+        plt.savefig("graphs/scalability/executionTimesComplexScenario.pdf")
         plt.show()
         
     def plotExecutionTimesWithoutSFM():
@@ -80,13 +80,13 @@ def plotsComplexScenario(directory, csvFiles, colors):
             if n == "SFM_Obs":
                 x = tupl[1]["peds"][0:4]
                 y = tupl[1]["executionTime"][0:4]
-            plt.plot(x, y, '-o', color=colors[idx], label=n)
+            plt.plot(x, y, '-'+markers[idx], color=colors[idx], label=n)
         
         plt.legend()
-        plt.title("Execution times of one simulation with different numbers of pedestrians")
-        plt.xlabel("Number of pedestrians")
-        plt.ylabel("Execution time [s]")
-        plt.savefig("graphs/scalability/executionTimesComplexScenarioWithoutSFM.png")
+        plt.title("Execution times of one simulation with different \n numbers of pedestrians", fontsize=16)
+        plt.xlabel("Number of pedestrians", fontsize=14)
+        plt.ylabel("Execution time [s]", fontsize=14)
+        plt.savefig("graphs/scalability/executionTimesComplexScenarioWithoutSFM.pdf")
         plt.show()
         
 
@@ -94,7 +94,7 @@ def plotsComplexScenario(directory, csvFiles, colors):
     plotExecutionTimesWithoutSFM()
 
 
-def plotHugeScenario(directory, csvFiles, colors):
+def plotHugeScenario(directory, csvFiles, colors, markers):
 
     data = {}
     
@@ -117,13 +117,13 @@ def plotHugeScenario(directory, csvFiles, colors):
     for idx, tupl in enumerate(data.items()):  
         x = tupl[1]["peds"]
         y = tupl[1]["executionTime"]
-        plt.plot(x, y, '-o', color=colors[idx], label=names[idx])
+        plt.plot(x, y, '-'+markers[idx], color=colors[idx], label=names[idx])
     
     plt.legend()
-    plt.title("Execution times of one simulation with huge numbers of pedestrians")
-    plt.xlabel("Number of pedestrians")
-    plt.ylabel("Execution time [s]")
-    plt.savefig("graphs/scalability/executionTimesHugeScenario.png")
+    plt.title("Execution times of one simulation with huge \n numbers of pedestrians", fontsize=16)
+    plt.xlabel("Number of pedestrians", fontsize=14)
+    plt.ylabel("Execution time [s]", fontsize=14)
+    plt.savefig("graphs/scalability/executionTimesHugeScenario.pdf")
     plt.show()
     
 
@@ -138,10 +138,13 @@ def main():
     colors = ["tab:cyan", "tab:orange", "tab:green", "tab:red"]
     colorsHuge = ["tab:cyan", "tab:orange", "tab:red"]
     
+    markers = ["o", "^", "*", "s"]
+    markersHuge = ["o", "^", "s"]
+    
 
-    plotsSimpleScenario(directory, csvSimple, colors)
-    plotsComplexScenario(directory, csvComplex, colors)
-    plotHugeScenario(directory, csvHuge, colorsHuge)
+    plotsSimpleScenario(directory, csvSimple, colors, markers)
+    plotsComplexScenario(directory, csvComplex, colors, markers)
+    plotHugeScenario(directory, csvHuge, colorsHuge, markersHuge)
     
     
 

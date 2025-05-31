@@ -2,6 +2,7 @@ package org.vadere.simulator.run;
 
 import au.com.bytecode.opencsv.CSVWriter;
 import org.lwjgl.system.CallbackI;
+import org.slf4j.LoggerFactory;
 import org.vadere.simulator.control.simulation.ScenarioRun;
 import org.vadere.simulator.projects.Scenario;
 import org.vadere.simulator.projects.SimulationResult;
@@ -29,11 +30,38 @@ import java.util.Optional;
 
 public class RunTest {
 
+    private static final org.slf4j.Logger log = LoggerFactory.getLogger(RunTest.class);
     private static Logger logger = Logger.getLogger(RunTest.class);
 
     public static String projectPath = "/home/acer/Documents/Master INFO/Mémoire/vadere/Scenarios/";
 
     private static VadereProject project;
+
+
+    /**
+     * Runs different scenarios with the four models in order to retrieve the percentage of
+     * pedestrians that manage to reach their assigned target
+     * @throws IOException
+     */
+    public static void runDifferentScenarios() throws IOException {
+        String scenarioPath = projectPath + "DifferentScenarios/";
+        project = IOVadere.readProject(scenarioPath);
+
+        ArrayList<String> models = new ArrayList<>(Arrays.asList("OSM", "CA", "SFM", "GN"));
+
+        ArrayList<Scenario> scenarios = new ArrayList<>();
+        for (int i = 1; i<=8; i++){
+            for (String model : models){
+                if (!model.equals("SFM") || (i != 6 & i != 8)){
+                    String scenarioName = "Scenario" + i + "_" + model;
+                    scenarios.add(project.getScenarioByName(scenarioName));
+                }
+            }
+        }
+        SeveralRuns run = new SeveralRuns(scenarioPath, scenarios);
+        run.run();
+    }
+
 
     /**
      * Runs 100 times the same scenario but with different configuration of random placed
@@ -151,9 +179,11 @@ public class RunTest {
             }
         }
 
-        TimeInfoRun run = new TimeInfoRun(scenarioPath, scenarios, "Variation Parameter Search");
-
+        SeveralRuns run = new SeveralRuns(scenarioPath, scenarios);
+        run.runTimeInfo("Variation Parameter Search");
     }
+
+
 
     public static void main(String[] args) throws IOException {
         runAllStabilityScenarios();
@@ -161,6 +191,7 @@ public class RunTest {
         runAllScalabilityComplexScenarios();
         runAllScalabilityHugeScenarios();
         runVariationParameterSearchOSM();
+        runDifferentScenarios();
 
     }
 }

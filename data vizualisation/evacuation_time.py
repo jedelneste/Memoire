@@ -8,10 +8,10 @@ def plot_evac_time():
     
     
     plt.plot(spaces, times, '-o', color="red")
-    plt.title("Evacuation time according to the personal space of pedestrians")
-    plt.xlabel("Personal Space of pedestrians [m]")
-    plt.ylabel("Evacuation Time [s]")
-    plt.savefig("graphs/evac.png")
+    plt.title("Evacuation time according to the \n personal space of pedestrians", fontsize=16)
+    plt.xlabel("Personal Space of pedestrians [m]", fontsize=14)
+    plt.ylabel("Evacuation Time [s]", fontsize=14)
+    plt.savefig("graphs/evac.pdf")
 
     plt.show()
     

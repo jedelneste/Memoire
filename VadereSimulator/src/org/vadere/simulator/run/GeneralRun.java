@@ -121,8 +121,6 @@ public class GeneralRun {
     }
 
 
-
-
     public double mean(ArrayList<Double> flows) {
         double sum = 0.0;
         for (Double num : flows) {
